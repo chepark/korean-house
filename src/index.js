@@ -5,13 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import Container from "@mui/material/Container";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Container maxWidth="lg">
-      <App />
-    </Container>
+    <AuthProvider>
+      <Container maxWidth="lg">
+        <App />
+      </Container>
+    </AuthProvider>
   </React.StrictMode>
 );
 

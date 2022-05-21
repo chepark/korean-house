@@ -1,6 +1,4 @@
-import { ErrorSharp } from "@mui/icons-material";
-
-export const validateSignupForm = (values, n, setErrors) => {
+export const validateSignupForm = (values, setErrors) => {
   let errors = {};
   const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 

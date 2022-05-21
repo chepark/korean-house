@@ -1,9 +1,16 @@
-import "./App.css";
-import Header from "./components/header/Header.component.jsx";
+import { useEffect, useContext } from "react";
 
+import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import Header from "./components/header/Header.component.jsx";
 import Login from "./components/login/Login.component";
 import Signup from "./components/signup/Signup.component";
+
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./configs/firebaseConfig";
+import { AuthContext, AuthProvider } from "./contexts/AuthContext";
+import { LOGIN_SUCCESS, LOGOUT } from "./types/types";
 
 const theme = createTheme({
   palette: {
@@ -23,6 +30,21 @@ const theme = createTheme({
 });
 
 function App() {
+  const { state, dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch({ type: LOGIN_SUCCESS, payload: user });
+      } else {
+        // user is signed out.
+        dispatch({ type: LOGOUT });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">

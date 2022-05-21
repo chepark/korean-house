@@ -30,7 +30,7 @@ const Signup = () => {
     e.preventDefault();
 
     // add validate function
-    validateSignupForm(values, errors, setErrors);
+    validateSignupForm(values, setErrors);
 
     // if no errors in validation
     // create user account.
