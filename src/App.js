@@ -1,4 +1,5 @@
 import { useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -6,11 +7,14 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "./components/header/Header.component.jsx";
 import Login from "./components/login/Login.component";
 import Signup from "./components/signup/Signup.component";
+import MenuList from "./components/menuList/MenuList.component";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./configs/firebaseConfig";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { LOGIN_SUCCESS, LOGOUT } from "./types/types";
+
+import { MenuProvider } from "./contexts/MenuContext";
 
 const theme = createTheme({
   palette: {
@@ -46,12 +50,19 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <Header />
-        <Signup />
-      </div>
-    </ThemeProvider>
+    <MenuProvider>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Header />
+          <Router>
+            <Routes>
+              <Route path="/" element={<MenuList />} />
+              <Route path="/signup" element={<Signup />} />
+            </Routes>
+          </Router>
+        </div>
+      </ThemeProvider>
+    </MenuProvider>
   );
 }
 

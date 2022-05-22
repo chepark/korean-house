@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 import Container from "@mui/material/Container";
 import { AuthProvider } from "./contexts/AuthContext";
+import { MenuProvider } from "./contexts/MenuContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
