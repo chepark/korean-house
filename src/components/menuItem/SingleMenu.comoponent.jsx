@@ -16,7 +16,7 @@ import {
 const SingleMenu = ({ singleMenu }) => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (e) => {
     e.preventDefault();

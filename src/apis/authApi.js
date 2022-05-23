@@ -3,11 +3,12 @@ import { auth } from "../configs/firebaseConfig";
 
 export const createAccount = async (email, password, username) => {
   try {
-    console.log("triggered");
     await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(auth.currentUser, {
       displayName: username,
     });
+    // save the date in firestore
+    // reference is uid
   } catch (error) {
     console.log("Error in Create Account: ", error.code);
   }

@@ -15,10 +15,35 @@ export const headerStyle = {
 export const headerRightStyle = {
   display: "flex",
   flexDirection: "row",
+  alignItems: "center",
   gap: "2rem",
   marginRight: "2rem",
 };
 
 export const headerLeftStyle = {
   marginLeft: "2rem",
+};
+
+export const cartStyle = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "relative",
+};
+
+export const cartNumStyle = {
+  position: "absolute",
+  top: 0,
+  right: -22,
+
+  padding: "2px",
+  width: "19px",
+  height: "19px",
+  borderRadius: "50%",
+  backgroundColor: "white",
+
+  textAlign: "center",
+  color: "#757de8",
+  fontSize: "12px",
 };
