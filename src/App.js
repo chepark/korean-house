@@ -15,6 +15,7 @@ import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { LOGIN_SUCCESS, LOGOUT } from "./types/types";
 
 import { MenuProvider } from "./contexts/MenuContext";
+import { CartProvider } from "./contexts/CartContext";
 
 const theme = createTheme({
   palette: {
@@ -51,17 +52,19 @@ function App() {
 
   return (
     <MenuProvider>
-      <ThemeProvider theme={theme}>
-        <div className="App">
-          <Header />
-          <Router>
-            <Routes>
-              <Route path="/" element={<MenuList />} />
-              <Route path="/signup" element={<Signup />} />
-            </Routes>
-          </Router>
-        </div>
-      </ThemeProvider>
+      <CartProvider>
+        <ThemeProvider theme={theme}>
+          <div className="App">
+            <Header />
+            <Router>
+              <Routes>
+                <Route path="/" element={<MenuList />} />
+                <Route path="/signup" element={<Signup />} />
+              </Routes>
+            </Router>
+          </div>
+        </ThemeProvider>
+      </CartProvider>
     </MenuProvider>
   );
 }

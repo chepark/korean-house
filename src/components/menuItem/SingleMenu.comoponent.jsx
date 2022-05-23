@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../../contexts/CartContext";
+
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
@@ -12,11 +14,13 @@ import {
   listItemLeftMui,
   listItemRightMui,
 } from "./singleMenuMuiStyles";
+import { ADD_TO_CART } from "../../types/types";
 
 const SingleMenu = ({ singleMenu }) => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const { state, dispatch } = useContext(CartContext);
 
   const handleQuantityChange = (e) => {
     e.preventDefault();
@@ -37,9 +41,27 @@ const SingleMenu = ({ singleMenu }) => {
     setQuantity(quantity);
   };
 
+  const onAddToCart = () => {
+    const item = {
+      name: singleMenu.name,
+      price: singleMenu.price,
+      quantity,
+    };
+    // validate if quantity is over 0.
+    if (quantity <= 0) {
+      setIsError(true);
+      setErrorMessage("Quantity should be more than 0.");
+      return;
+    }
+
+    // dispatch
+    dispatch({ type: ADD_TO_CART, payload: item });
+  };
+
   return (
     <>
       <ListItem sx={listItemContainerMui}>
+        {console.log("cart context", state.cartItems)}
         <Box component="div" sx={listItemLeftMui}>
           <img
             className="menu-image"
@@ -65,7 +87,11 @@ const SingleMenu = ({ singleMenu }) => {
             value={quantity}
             onChange={handleQuantityChange}
           />
-          <Button variant="contained" sx={{ width: "100%" }}>
+          <Button
+            variant="contained"
+            sx={{ width: "100%" }}
+            onClick={onAddToCart}
+          >
             Add to Cart
           </Button>
         </Box>

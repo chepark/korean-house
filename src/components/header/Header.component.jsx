@@ -1,3 +1,5 @@
+import { useContext, useEffect } from "react";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -8,8 +10,11 @@ import {
   cartStyle,
   cartNumStyle,
 } from "./headerMaterialStyle";
+import { CartContext } from "../../contexts/CartContext";
 
 const Header = () => {
+  const { state, dispatch } = useContext(CartContext);
+
   return (
     <Box sx={headerStyle}>
       <Box sx={headerLeftStyle}>
@@ -20,7 +25,9 @@ const Header = () => {
         <Typography>Sign Up</Typography>
         <Box sx={cartStyle}>
           <ShoppingCartOutlinedIcon />
-          <Typography sx={cartNumStyle}>11</Typography>
+          <Typography sx={cartNumStyle}>
+            {state.cartItems && state.cartItems.length}
+          </Typography>
         </Box>
       </Box>
     </Box>

@@ -1,29 +1,23 @@
-import {
-  ADD_TO_CART,
-  REMOVE_FROM_CART,
-  INCREASE_QUANTITY,
-  DECREASE_QUANTITY,
-  EDIT_QUANTITY,
-} from "../types/types";
+import CartItem from "../models/CartItem";
+import { ADD_TO_CART, REMOVE_FROM_CART, EDIT_QUANTITY } from "../types/types";
 
-const cartInitialState = {
+export const cartInitialState = {
   cartItems: [],
 };
 
-const cartReducer = (state, action) => {
+export const cartReducer = (state, action) => {
   const { type, payload } = action;
+  const existingCartItem = state.cartItems.find(
+    (cartItem) => cartItem.name === payload.name
+  );
 
   switch (type) {
     case ADD_TO_CART:
-      const newCartItem = payload;
-      const existingCartItem = state.cartItems.find(
-        (cartItem) => cartItem.name === newCartItem.name
-      );
-
       if (existingCartItem) {
-        existingCartItem.editQuantityInCart(newCartItem.quantity);
+        existingCartItem.editQuantityInCart(payload.quantity);
         return { cartItems: [...state.cartItems] };
       } else {
+        const newCartItem = new CartItem(payload);
         return { cartItems: [...state.cartItems, newCartItem] };
       }
 
