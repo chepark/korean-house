@@ -8,6 +8,7 @@ import Header from "./components/header/Header.component.jsx";
 import Login from "./components/login/Login.component";
 import Signup from "./components/signup/Signup.component";
 import MenuList from "./components/menuList/MenuList.component";
+import Cart from "./components/cart/Cart.component";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./configs/firebaseConfig";
@@ -41,6 +42,7 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch({ type: LOGIN_SUCCESS, payload: user });
+        console.log("User in");
       } else {
         // user is signed out.
         dispatch({ type: LOGOUT });
@@ -59,7 +61,9 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<MenuList />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/cart" element={<Cart />} />
               </Routes>
             </Router>
           </div>

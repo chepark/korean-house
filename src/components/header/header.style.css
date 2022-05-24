@@ -1,0 +1,10 @@
+.header-link {
+  display: inline-block;
+  color: white;
+  display: flex;
+}
+
+.link-text {
+  text-decoration: none;
+  cursor: pointer;
+}

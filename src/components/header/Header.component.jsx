@@ -11,24 +11,69 @@ import {
   cartNumStyle,
 } from "./headerMaterialStyle";
 import { CartContext } from "../../contexts/CartContext";
+import "./header.style.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import { userLogOut } from "../../apis";
 
 const Header = () => {
-  const { state, dispatch } = useContext(CartContext);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
+
+  const onCartClick = (e) => {
+    e.preventDefault();
+
+    // user && save cartItems data in firestore.
+    // 1. get user uid.
+    // 2. search user document with user uid in firestore.
+    // 3. save cartItems in cartItems fields.
+    // 3.1 any repetitive items?
+    // !user && save cartItems in localStorage.
+  };
+
+  const handleLogout = async () => {
+    await userLogOut();
+  };
+
+  const renderLogInAndSignup = () => {
+    return (
+      <>
+        <a className="header-link link-text" href="/login">
+          <Typography>Log In</Typography>
+        </a>
+        <a className="header-link link-text" href="/signup">
+          <Typography>Sign Up</Typography>
+        </a>
+      </>
+    );
+  };
+
+  const renderLogOutAndCart = () => {
+    return (
+      <>
+        <Typography onClick={handleLogout}>Log Out</Typography>
+        <Box sx={cartStyle}>
+          <a className="header-link" href="/cart">
+            <ShoppingCartOutlinedIcon />
+            <Typography sx={cartNumStyle}>
+              {cartState.cartItems && cartState.cartItems.length > 0
+                ? cartState.cartItems.length
+                : "0"}
+            </Typography>
+          </a>
+        </Box>
+      </>
+    );
+  };
 
   return (
     <Box sx={headerStyle}>
-      <Box sx={headerLeftStyle}>
-        <Typography>Food Delivery</Typography>
-      </Box>
-      <Box sx={headerRightStyle}>
-        <Typography>Log In</Typography>
-        <Typography>Sign Up</Typography>
-        <Box sx={cartStyle}>
-          <ShoppingCartOutlinedIcon />
-          <Typography sx={cartNumStyle}>
-            {state.cartItems && state.cartItems.length}
-          </Typography>
+      <a className="header-link link-text" href="/">
+        <Box sx={headerLeftStyle}>
+          <Typography>Food Delivery</Typography>
         </Box>
+      </a>
+      <Box sx={headerRightStyle}>
+        {!authState.user ? renderLogInAndSignup() : renderLogOutAndCart()}
       </Box>
     </Box>
   );

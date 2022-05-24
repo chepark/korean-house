@@ -14,13 +14,15 @@ import {
   listItemLeftMui,
   listItemRightMui,
 } from "./singleMenuMuiStyles";
-import { ADD_TO_CART } from "../../types/types";
+import { ADD_TO_CART, CART_ERROR } from "../../types/types";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const SingleMenu = ({ singleMenu }) => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const { state, dispatch } = useContext(CartContext);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
 
   const handleQuantityChange = (e) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ const SingleMenu = ({ singleMenu }) => {
 
     let quantity = e.target.value;
 
-    if (quantity < 0) {
+    if (quantity <= 0) {
       setIsError(true);
       setErrorMessage("Quantity should be more than 0.");
     } else if (quantity > singleMenu.quantity) {
@@ -54,14 +56,16 @@ const SingleMenu = ({ singleMenu }) => {
       return;
     }
 
-    // dispatch
-    dispatch({ type: ADD_TO_CART, payload: item });
+    if (!authState.user) {
+      cartDispatch({ type: CART_ERROR, payload: "Log in is required." });
+    } else if (authState.user) {
+      cartDispatch({ type: ADD_TO_CART, payload: item });
+    }
   };
 
   return (
     <>
       <ListItem sx={listItemContainerMui}>
-        {console.log("cart context", state.cartItems)}
         <Box component="div" sx={listItemLeftMui}>
           <img
             className="menu-image"

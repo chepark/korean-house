@@ -26,7 +26,7 @@ const Signup = () => {
     setValues({ ...values, [name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // add validate function
@@ -35,14 +35,13 @@ const Signup = () => {
     // if no errors in validation
     // create user account.
     if (!errors) {
-      createAccount(values.email, values.password, values.username);
+      await createAccount(values.email, values.password, values.username);
     } else return;
   };
 
   return (
     <>
       <Container sx={signupContainerMui}>
-        {console.log(errors)}
         <h2>Sign Up</h2>
         <Box component="form" sx={signupFormMui}>
           <TextField
