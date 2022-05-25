@@ -16,6 +16,7 @@ import {
 } from "./singleMenuMuiStyles";
 import { ADD_TO_CART, CART_ERROR } from "../../types/types";
 import { AuthContext } from "../../contexts/AuthContext";
+import { addToCartInFirestore } from "../../apis/cartApi";
 
 const SingleMenu = ({ singleMenu }) => {
   const [isError, setIsError] = useState(false);
@@ -43,7 +44,8 @@ const SingleMenu = ({ singleMenu }) => {
     setQuantity(quantity);
   };
 
-  const onAddToCart = () => {
+  const onAddToCart = (e) => {
+    e.preventDefault();
     const item = {
       name: singleMenu.name,
       price: singleMenu.price,
@@ -59,7 +61,9 @@ const SingleMenu = ({ singleMenu }) => {
     if (!authState.user) {
       cartDispatch({ type: CART_ERROR, payload: "Log in is required." });
     } else if (authState.user) {
-      cartDispatch({ type: ADD_TO_CART, payload: item });
+      addToCartInFirestore(authState.user, item, (cartItemsArr) => {
+        cartDispatch({ type: ADD_TO_CART, payload: cartItemsArr });
+      });
     }
   };
 

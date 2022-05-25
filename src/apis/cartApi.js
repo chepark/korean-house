@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../configs/firebaseConfig";
 
-export const addToCartInFirestore = async (user, item) => {
+export const addToCartInFirestore = async (user, item, cb) => {
   // get the document.
   const docRef = doc(db, "users", user.uid);
   const docSnap = await getDoc(docRef);
@@ -63,5 +63,14 @@ export const addToCartInFirestore = async (user, item) => {
     await updateDoc(docRef, {
       cartItems: cartItemsToUpdtate,
     });
+
+    cb(cartItemsToUpdtate);
   }
+};
+
+export const cartCounter = async (user) => {
+  const docRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data();
+  return docData.cartItems.length;
 };

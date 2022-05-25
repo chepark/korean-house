@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -13,11 +13,21 @@ import {
 import { CartContext } from "../../contexts/CartContext";
 import "./header.style.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { userLogOut } from "../../apis";
+import { cartCounter, userLogOut } from "../../apis";
 
 const Header = () => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
+  const [cartNums, setCartNums] = useState(null);
+
+  useEffect(() => {
+    const fetchCartNum = async () => {
+      const number = await cartCounter(authState.user);
+      setCartNums(number);
+    };
+
+    fetchCartNum();
+  }, [cartState.cartItems]);
 
   const onCartClick = (e) => {
     e.preventDefault();
@@ -54,11 +64,7 @@ const Header = () => {
         <Box sx={cartStyle}>
           <a className="header-link" href="/cart">
             <ShoppingCartOutlinedIcon />
-            <Typography sx={cartNumStyle}>
-              {cartState.cartItems && cartState.cartItems.length > 0
-                ? cartState.cartItems.length
-                : "0"}
-            </Typography>
+            <Typography sx={cartNumStyle}>{cartNums}</Typography>
           </a>
         </Box>
       </>

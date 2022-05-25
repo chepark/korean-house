@@ -2,11 +2,12 @@ import { useContext } from "react";
 import { CartContext } from "../../contexts/CartContext";
 
 const Cart = () => {
-  const { state, dispatch } = useContext(CartContext);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   return (
     <div>
-      {state && state.carItems ? console.log(state.carItems) : null}cart
+      {cartState && cartState.carItems ? console.log(cartState.carItems) : null}
+      cart
     </div>
   );
 };
