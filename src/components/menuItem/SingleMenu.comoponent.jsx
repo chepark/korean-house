@@ -50,6 +50,7 @@ const SingleMenu = ({ singleMenu }) => {
       name: singleMenu.name,
       price: singleMenu.price,
       quantity,
+      imageURL: singleMenu.imageURL,
     };
     // validate if quantity is over 0.
     if (quantity <= 0) {

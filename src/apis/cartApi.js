@@ -1,3 +1,4 @@
+import { getAccordionActionsUtilityClass } from "@mui/material";
 import {
   collection,
   doc,
@@ -13,6 +14,20 @@ import {
   deleteField,
 } from "firebase/firestore";
 import { db } from "../configs/firebaseConfig";
+
+export const getCartItems = async (uid, cb) => {
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data();
+
+  if (!docData.cartItems) {
+    cb(null);
+  }
+  // setCartItems
+  cb(docData.cartItems);
+
+  return docData.cartItems;
+};
 
 export const addToCartInFirestore = async (user, item, cb) => {
   // get the document.
@@ -40,10 +55,12 @@ export const addToCartInFirestore = async (user, item, cb) => {
         if (cartItem.name !== item.name) {
           cartItemsToUpdtate.push(cartItem);
         } else if (cartItem.name === item.name) {
+          const { name, price, imageURL } = item;
           let newCartItem = {
-            name: item.name,
-            price: item.price,
+            name,
+            price,
             quantity: parseInt(cartItem.quantity) + parseInt(item.quantity),
+            imageURL,
           };
           cartItemsToUpdtate.push(newCartItem);
         }
@@ -68,9 +85,63 @@ export const addToCartInFirestore = async (user, item, cb) => {
   }
 };
 
-export const cartCounter = async (user) => {
+export const removeCartItemFromFirestore = async (user, item, cb) => {
   const docRef = doc(db, "users", user.uid);
   const docSnap = await getDoc(docRef);
   const docData = docSnap.data();
-  return docData.cartItems.length;
+  const existingCartItems = docData.cartItems;
+
+  let cartItemsAfterRemoving = [];
+
+  existingCartItems.forEach((existingItem) => {
+    if (existingItem.name !== item.name) {
+      cartItemsAfterRemoving.push(existingItem);
+    }
+  });
+
+  // delete cartItems in firestore
+  await updateDoc(docRef, {
+    cartItems: deleteField(),
+  });
+  // save cartItems in firestore
+  await updateDoc(docRef, {
+    cartItems: cartItemsAfterRemoving,
+  });
+
+  cb(cartItemsAfterRemoving);
+};
+
+export const editCartItemQuantityInFirestore = async (
+  uid,
+  item,
+  newQuantity,
+  cb
+) => {
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data();
+  const existingCartItems = docData.cartItems;
+
+  let cartItemsToUpdate = [];
+  // find the element to change.
+  existingCartItems.forEach((cartItem) => {
+    if (cartItem.name !== item.name) {
+      cartItemsToUpdate.push(cartItem);
+    } else if (cartItem.name === item.name) {
+      let itemAfterQuantityChange = { ...item };
+      itemAfterQuantityChange.quantity = newQuantity;
+
+      cartItemsToUpdate.push(itemAfterQuantityChange);
+    }
+  });
+
+  await updateDoc(docRef, {
+    cartItems: deleteField(),
+  });
+  // save cartItems in firestore
+  await updateDoc(docRef, {
+    cartItems: cartItemsToUpdate,
+  });
+
+  cb(cartItemsToUpdate);
 };

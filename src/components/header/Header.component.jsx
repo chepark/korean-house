@@ -13,21 +13,28 @@ import {
 import { CartContext } from "../../contexts/CartContext";
 import "./header.style.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { cartCounter, userLogOut } from "../../apis";
+import { cartCounter, getCartItems, userLogOut } from "../../apis";
 
 const Header = () => {
-  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
-  const [cartNums, setCartNums] = useState(null);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  // const [cartItems, setCartItems] = useState(null);
+  const [cartNums, setCartNums] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchCartNum = async () => {
-      const number = await cartCounter(authState.user);
-      setCartNums(number);
+    const fetchCartItems = async () => {
+      if (authState.user && authState.user.uid) {
+        const firestoreCartItems = await getCartItems(
+          authState.user.uid,
+          () => {}
+        );
+        setCartNums(firestoreCartItems.length);
+      }
     };
 
-    fetchCartNum();
-  }, [cartState.cartItems]);
+    fetchCartItems();
+  }, [authState.user, cartState.cartItems]);
 
   const onCartClick = (e) => {
     e.preventDefault();
