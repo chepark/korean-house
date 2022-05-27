@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SingleCartItem from "../singleCartItem/SingleCartItem.component.jsx";
 
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
-
+import { ADD_TO_CART } from "../../types/types";
 import { getCartItems, removeCartItem } from "../../apis";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const Cart = () => {
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
@@ -20,6 +22,8 @@ const Cart = () => {
   const [loading, setLoading] = useState();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -36,16 +40,15 @@ const Cart = () => {
     fetchCartItems();
   }, [authState.user]);
 
-  useEffect(() => {
-    console.log(cartItems);
-    const cartTotal = cartItems
-      .map((item) => item.quantity * item.price)
-      .reduce((prevValue, curValue) => {
-        return prevValue + curValue;
-      }, 0);
+  // useEffect(() => {
+  //   const cartTotal = cartItems
+  //     .map((item) => item.quantity * item.price)
+  //     .reduce((prevValue, curValue) => {
+  //       return prevValue + curValue;
+  //     }, 0);
 
-    setTotal(cartTotal);
-  }, [cartItems, authState.user]);
+  //   setTotal(cartTotal);
+  // }, [cartState.cartItems]);
 
   const renderCartItems = () => {
     return cartItems.map((cartItem) => {
@@ -60,6 +63,21 @@ const Cart = () => {
     });
   };
 
+  const renderCartTotal = () => {
+    const cartTotal = cartItems
+      .map((item) => item.quantity * item.price)
+      .reduce((prevValue, curValue) => {
+        return prevValue + curValue;
+      }, 0);
+
+    return cartTotal;
+  };
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    navigate("/checkout", { replace: true });
+  };
+
   return (
     <>
       <Box>
@@ -71,11 +89,14 @@ const Cart = () => {
       <Alert severity="error">{cartState.cartError}</Alert>
     ) : null} */}
         {loading && <CircularProgress />}
-        <List> {cartItems && cartItems.length > 0 && renderCartItems()} </List>
+        <List>{cartItems && cartItems.length > 0 && renderCartItems()}</List>
       </Box>
       <Box>
-        <Typography>Total: {total}</Typography>
+        <Typography>
+          Total: {cartItems && cartItems.length > 0 ? renderCartTotal() : null}
+        </Typography>
       </Box>
+      <Button onClick={handleCheckout}>Checkout</Button>
     </>
 
     // <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
