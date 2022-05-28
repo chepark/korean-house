@@ -1,4 +1,3 @@
-import { getAccordionActionsUtilityClass } from "@mui/material";
 import {
   collection,
   doc,
@@ -110,6 +109,13 @@ export const removeCartItemFromFirestore = async (user, item, cb) => {
   });
 
   cb(cartItemsAfterRemoving);
+};
+
+export const removeCartItemsFromFirestore = async (uid, cb) => {
+  const docRef = doc(db, "users", uid);
+  await updateDoc(docRef, { cartItems: deleteField() });
+
+  cb();
 };
 
 export const editCartItemQuantityInFirestore = async (

@@ -29,23 +29,14 @@ const Header = () => {
           authState.user.uid,
           () => {}
         );
-        setCartNums(firestoreCartItems.length);
+        if (firestoreCartItems.length <= 0) {
+          setCartNums(0);
+        } else setCartNums(firestoreCartItems.length);
       }
     };
 
     fetchCartItems();
   }, [authState.user, cartState.cartItems]);
-
-  const onCartClick = (e) => {
-    e.preventDefault();
-
-    // user && save cartItems data in firestore.
-    // 1. get user uid.
-    // 2. search user document with user uid in firestore.
-    // 3. save cartItems in cartItems fields.
-    // 3.1 any repetitive items?
-    // !user && save cartItems in localStorage.
-  };
 
   const handleLogout = async () => {
     await userLogOut();

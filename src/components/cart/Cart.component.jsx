@@ -51,7 +51,7 @@ const Cart = () => {
     };
 
     fetchCartItems();
-  }, [authState.user]);
+  }, [authState.user, cartState]);
 
   const renderCartItems = () => {
     return cartItems.map((cartItem) => {
@@ -109,14 +109,18 @@ const Cart = () => {
       <Alert severity="error">{cartState.cartError}</Alert>
     ) : null} */}
         {loading && <CircularProgress />}
-        <List>{cartItems && cartItems.length > 0 && renderCartItems()}</List>
+        <List>
+          {cartItems && cartItems.length > 0 && renderCartItems()}
+          {!cartItems && "The cart is empty."}
+          {cartItems?.length < 0 && "The cart is empty"}
+        </List>
       </Box>
       <Box>
         <Typography>
           Total: {cartItems && cartItems.length > 0 ? renderCartTotal() : null}
         </Typography>
       </Box>
-      <Button onClick={redirectToCheckout}>Checkout</Button>
+      <Button onClick={redirectToCheckout}>Go to Checkout</Button>
     </>
 
     // <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
