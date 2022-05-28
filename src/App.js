@@ -17,7 +17,7 @@ import { LOGIN_SUCCESS, LOGOUT } from "./types/types";
 
 import { MenuProvider } from "./contexts/MenuContext";
 import { CartProvider } from "./contexts/CartContext";
-import Checkout from "./components/checkout/Checkout.component";
+
 import CheckoutSuccess from "./components/checkout/CheckoutSuccess.component";
 import CheckoutCancel from "./components/checkout/CheckoutCancel.component";
 
@@ -69,7 +69,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
+
                 <Route path="/success" element={<CheckoutSuccess />} />
                 <Route path="/cancel" element={<CheckoutCancel />} />
               </Routes>

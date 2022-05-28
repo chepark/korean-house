@@ -55,12 +55,13 @@ export const addToCartInFirestore = async (user, item, cb) => {
         if (cartItem.name !== item.name) {
           cartItemsToUpdtate.push(cartItem);
         } else if (cartItem.name === item.name) {
-          const { name, price, imageURL } = item;
+          const { name, price, imageURL, stripePriceID } = item;
           let newCartItem = {
             name,
             price,
             quantity: parseInt(cartItem.quantity) + parseInt(item.quantity),
             imageURL,
+            stripePriceID,
           };
           cartItemsToUpdtate.push(newCartItem);
         }

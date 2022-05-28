@@ -37,6 +37,7 @@ const Menu = () => {
     } else {
       return <div>loading...</div>;
     }
+    console.log("menuState", menuState.menu);
   };
 
   return (

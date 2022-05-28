@@ -12,8 +12,8 @@ export const getMenu = async (cb) => {
     const querySnapshot = await getDocs(collection(db, "menus"));
 
     querySnapshot.forEach((doc) => {
-      const { id, name, quantity, price, imageURL } = doc.data();
-      let singleMenu = { id, name, quantity, price, imageURL };
+      const { id, name, price, imageURL, stripePriceID } = doc.data();
+      let singleMenu = { id, name, price, imageURL, stripePriceID };
       menus.push(singleMenu);
     });
 

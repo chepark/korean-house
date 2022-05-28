@@ -51,6 +51,7 @@ const SingleMenu = ({ singleMenu }) => {
       price: singleMenu.price,
       quantity,
       imageURL: singleMenu.imageURL,
+      stripePriceID: singleMenu.stripePriceID,
     };
     // validate if quantity is over 0.
     if (quantity <= 0) {

@@ -1,17 +1,29 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SingleCartItem from "../singleCartItem/SingleCartItem.component.jsx";
 
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ADD_TO_CART } from "../../types/types";
 import { getCartItems, removeCartItem } from "../../apis";
+import SingleCartItem from "../singleCartItem/SingleCartItem.component.jsx";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+
+import { loadStripe } from "@stripe/stripe-js";
+
+let stripePromise;
+
+const getStripe = () => {
+  if (!stripePromise) {
+    stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_KEY}`);
+  }
+
+  return stripePromise;
+};
 
 const Cart = () => {
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
@@ -22,6 +34,7 @@ const Cart = () => {
   const [loading, setLoading] = useState();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [stripeCheckoutList, setStripeCheckoutList] = useState();
 
   const navigate = useNavigate();
 
@@ -39,16 +52,6 @@ const Cart = () => {
 
     fetchCartItems();
   }, [authState.user]);
-
-  // useEffect(() => {
-  //   const cartTotal = cartItems
-  //     .map((item) => item.quantity * item.price)
-  //     .reduce((prevValue, curValue) => {
-  //       return prevValue + curValue;
-  //     }, 0);
-
-  //   setTotal(cartTotal);
-  // }, [cartState.cartItems]);
 
   const renderCartItems = () => {
     return cartItems.map((cartItem) => {
@@ -73,9 +76,26 @@ const Cart = () => {
     return cartTotal;
   };
 
-  const handleCheckout = (e) => {
+  const redirectToCheckout = async (e) => {
     e.preventDefault();
-    navigate("/checkout", { replace: true });
+    let stripeCheckoutList = [];
+
+    cartItems.forEach((cartItem) => {
+      stripeCheckoutList.push({
+        price: cartItem.stripePriceID,
+        quantity: parseInt(cartItem.quantity),
+      });
+    });
+
+    const checkoutOptions = {
+      lineItems: [...stripeCheckoutList],
+      mode: "payment",
+      successUrl: `${window.location.origin}/success`,
+      cancelUrl: `${window.location.origin}/cancel`,
+    };
+
+    const stripe = await getStripe();
+    const { error } = await stripe.redirectToCheckout(checkoutOptions);
   };
 
   return (
@@ -96,7 +116,7 @@ const Cart = () => {
           Total: {cartItems && cartItems.length > 0 ? renderCartTotal() : null}
         </Typography>
       </Box>
-      <Button onClick={handleCheckout}>Checkout</Button>
+      <Button onClick={redirectToCheckout}>Checkout</Button>
     </>
 
     // <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
