@@ -10,6 +10,7 @@ import {
   arrayRemove,
   query,
   where,
+  orderBy,
   documentId,
   deleteField,
 } from "firebase/firestore";
@@ -24,7 +25,6 @@ export const addOrderToFirestore = async (uid, orderItems, cb) => {
 
   cb();
 
-  console.log(orderDocRef.id);
   addOrderHistoryToUserFirestore(uid, orderDocRef.id);
 };
 
@@ -41,4 +41,35 @@ const addOrderHistoryToUserFirestore = async (uid, orderDocId) => {
   await updateDoc(docRef, {
     orderHistory: orderHistoryToUpdate,
   });
+};
+
+export const getUserOrdersFromFirestore = async (uid, cb) => {
+  // get orderHistory from user doc
+  const userDocRef = doc(db, "users", uid);
+  const docSnap = await getDoc(userDocRef);
+  const orderReference = docSnap.data().orderHistory;
+
+  // get order details from order doc
+  const ordersRef = collection(db, "orders");
+  const q = query(ordersRef, where(documentId(), "in", [...orderReference]));
+  const querySnapshot = await getDocs(q);
+
+  let orders = [];
+
+  querySnapshot.forEach((orderDoc) => {
+    let orderObject = orderDoc.data();
+
+    // Change firebase timestamp to string.
+    let time = new Date(
+      orderObject.createdAt.seconds * 1000
+    ).toLocaleDateString();
+    orderObject.createdAt = time;
+
+    // save document id as order number
+    orderObject.orderNumber = orderDoc.id;
+
+    orders.push(orderObject);
+  });
+
+  cb(orders);
 };

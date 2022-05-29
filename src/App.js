@@ -9,6 +9,7 @@ import Login from "./components/login/Login.component";
 import Signup from "./components/signup/Signup.component";
 import MenuList from "./components/menuList/MenuList.component";
 import Cart from "./components/cart/Cart.component";
+import MyOrders from "./components/myOrders/MyOrders.component";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./configs/firebaseConfig";
@@ -72,6 +73,7 @@ function App() {
 
                 <Route path="/success" element={<CheckoutSuccess />} />
                 <Route path="/cancel" element={<CheckoutCancel />} />
+                <Route path="/myorders" element={<MyOrders />} />
               </Routes>
             </Router>
           </div>

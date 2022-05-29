@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Avatar from "@mui/material/Avatar";
+
 import {
   headerStyle,
   headerRightStyle,
@@ -29,9 +31,9 @@ const Header = () => {
           authState.user.uid,
           () => {}
         );
-        if (firestoreCartItems.length <= 0) {
-          setCartNums(0);
-        } else setCartNums(firestoreCartItems.length);
+        if (firestoreCartItems?.length > 0) {
+          setCartNums(firestoreCartItems.length);
+        } else setCartNums(0);
       }
     };
 
@@ -58,6 +60,9 @@ const Header = () => {
   const renderLogOutAndCart = () => {
     return (
       <>
+        <a className="header-link link-text" href="/myorders">
+          <Typography>My Orders</Typography>
+        </a>
         <Typography onClick={handleLogout}>Log Out</Typography>
         <Box sx={cartStyle}>
           <a className="header-link" href="/cart">
