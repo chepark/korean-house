@@ -10,6 +10,8 @@ import SingleMenu from "../menuItem/SingleMenu.comoponent";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import { menuListContainerStyle, menuTitleStyle } from "./menuListMuiStyles";
 
 const Menu = () => {
   const { state: menuState, dispatch: menuDispatch } = useContext(MenuContext);
@@ -37,18 +39,19 @@ const Menu = () => {
     } else {
       return <div>loading...</div>;
     }
-    console.log("menuState", menuState.menu);
   };
 
   return (
     <>
-      <Typography variant="h3" component="h1">
-        Menu
-      </Typography>
-      {cartState.cartError ? (
-        <Alert severity="error">{cartState.cartError}</Alert>
-      ) : null}
-      <List>{renderMenu()}</List>
+      <Box sx={menuListContainerStyle}>
+        <Typography variant="h3" component="h1" sx={menuTitleStyle}>
+          Menu
+        </Typography>
+        {cartState.cartError ? (
+          <Alert severity="error">{cartState.cartError}</Alert>
+        ) : null}
+        <List>{renderMenu()}</List>
+      </Box>
     </>
   );
 };

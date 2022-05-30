@@ -3,6 +3,8 @@ import { getUserOrdersFromFirestore } from "../../apis/orderApi";
 import { AuthContext } from "../../contexts/AuthContext";
 
 import {
+  Container,
+  CircularProgress,
   List,
   ListItem,
   Typography,
@@ -13,6 +15,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
+import { myOrderContainerStyle, loadingBoxStyle } from "./myOrderMuiStyle";
 
 const MyOrders = () => {
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
@@ -36,12 +39,19 @@ const MyOrders = () => {
     return orders.map((order) => {
       return (
         <ListItem
-          sx={{ display: "flex", flexDirection: "column", width: "80%" }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "80%",
+            marginTop: "3rem",
+          }}
         >
           <Box
             sx={{
               width: "100%",
-              backgroundColor: "grey",
+              backgroundColor: "primary.light",
+              color: "primary.contrastText",
+              padding: ".5rem 1rem",
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
@@ -49,14 +59,14 @@ const MyOrders = () => {
           >
             <Typography>Order made: {order.createdAt}</Typography>
             <Typography>Order Numer: {order.orderNumber}</Typography>
-            <Typography>Total: {orderTotal(order)}</Typography>
+            <Typography>Total: €{orderTotal(order)}</Typography>
           </Box>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Menu</TableCell>
                 <TableCell>Qt</TableCell>
-                <TableCell>Price</TableCell>
+                <TableCell align="right">Price</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -65,7 +75,9 @@ const MyOrders = () => {
                   <TableRow>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{item.quantity * item.price}</TableCell>
+                    <TableCell align="right">
+                      €{item.quantity * item.price}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -90,9 +102,19 @@ const MyOrders = () => {
   };
 
   return (
-    <div>
-      <div>{loading ? "...loading" : renderOrders()}</div>
-    </div>
+    <>
+      <Container sx={myOrderContainerStyle}>
+        {loading ? (
+          <Box sx={loadingBoxStyle}>
+            <Typography>...loading orders</Typography>
+            <CircularProgress sx={{ marginTop: "2rem" }} />
+          </Box>
+        ) : (
+          renderOrders()
+        )}
+      </Container>
+      {/* <div>{loading ? "...loading" : renderOrders()}</div> */}
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Avatar from "@mui/material/Avatar";
 
 import {
   headerStyle,
@@ -11,7 +10,8 @@ import {
   headerLeftStyle,
   cartStyle,
   cartNumStyle,
-} from "./headerMaterialStyle";
+  headerLayout,
+} from "./headerMuiStyle";
 import { CartContext } from "../../contexts/CartContext";
 import "./header.style.css";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -63,7 +63,9 @@ const Header = () => {
         <a className="header-link link-text" href="/myorders">
           <Typography>My Orders</Typography>
         </a>
-        <Typography onClick={handleLogout}>Log Out</Typography>
+        <Typography className="header-link link-text" onClick={handleLogout}>
+          Log Out
+        </Typography>
         <Box sx={cartStyle}>
           <a className="header-link" href="/cart">
             <ShoppingCartOutlinedIcon />
@@ -75,14 +77,16 @@ const Header = () => {
   };
 
   return (
-    <Box sx={headerStyle}>
-      <a className="header-link link-text" href="/">
-        <Box sx={headerLeftStyle}>
-          <Typography>Food Delivery</Typography>
+    <Box sx={headerLayout}>
+      <Box sx={headerStyle}>
+        <a className="header-link link-text" href="/">
+          <Box sx={headerLeftStyle}>
+            <Typography>Food Delivery</Typography>
+          </Box>
+        </a>
+        <Box sx={headerRightStyle}>
+          {!authState.user ? renderLogInAndSignup() : renderLogOutAndCart()}
         </Box>
-      </a>
-      <Box sx={headerRightStyle}>
-        {!authState.user ? renderLogInAndSignup() : renderLogOutAndCart()}
       </Box>
     </Box>
   );

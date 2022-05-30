@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { CartContext } from "../../contexts/CartContext";
 
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -13,10 +13,12 @@ import {
   listItemContainerMui,
   listItemLeftMui,
   listItemRightMui,
+  namePriceLayout,
 } from "./singleMenuMuiStyles";
 import { ADD_TO_CART, CART_ERROR } from "../../types/types";
 import { AuthContext } from "../../contexts/AuthContext";
 import { addToCartInFirestore } from "../../apis/cartApi";
+import { Typography } from "@mui/material";
 
 const SingleMenu = ({ singleMenu }) => {
   const [isError, setIsError] = useState(false);
@@ -78,13 +80,14 @@ const SingleMenu = ({ singleMenu }) => {
             src={singleMenu.imageURL}
             alt={singleMenu.name}
           />
-          <ListItemText
-            primary={singleMenu.name}
-            secondary={"€" + singleMenu.price}
-          />
+          <Box sx={namePriceLayout}>
+            <Typography>{singleMenu.name.toUpperCase()}</Typography>
+            <Typography>€ {singleMenu.price}</Typography>
+          </Box>
         </Box>
         <Box component="div" sx={listItemRightMui}>
           <TextField
+            sx={{ maxWidth: "80px" }}
             error={isError}
             helperText={errorMessage}
             size="small"
@@ -99,7 +102,7 @@ const SingleMenu = ({ singleMenu }) => {
           />
           <Button
             variant="contained"
-            sx={{ width: "100%" }}
+            sx={{ width: "inherit" }}
             onClick={onAddToCart}
           >
             Add to Cart

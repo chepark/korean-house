@@ -8,17 +8,20 @@ import {
   removeCartItemFromFirestore,
 } from "../../apis";
 
-import Box from "@mui/material/Box";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-
+import {
+  Box,
+  ListItem,
+  Divider,
+  ListItemText,
+  TextField,
+  Button,
+  Typography,
+} from "@mui/material";
 import {
   listItemContainerMui,
   listItemLeftMui,
   listItemRightMui,
+  namePriceLayout,
 } from "../menuItem/singleMenuMuiStyles";
 
 const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
@@ -75,13 +78,14 @@ const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
             src={cartItem.imageURL}
             alt={cartItem.name}
           />
-          <ListItemText
-            primary={cartItem.name}
-            secondary={"€" + cartItem.price}
-          />
+          <Box sx={namePriceLayout}>
+            <Typography>{cartItem.name.toUpperCase()}</Typography>
+            <Typography>€ {cartItem.price}</Typography>
+          </Box>
         </Box>
         <Box component="div" sx={listItemRightMui}>
           <TextField
+            sx={{ maxWidth: "80px" }}
             // error={isError}
             // helperText={errorMessage}
             size="small"
@@ -97,7 +101,7 @@ const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
 
           <Button
             variant="outlined"
-            sx={{ width: "100%" }}
+            sx={{ width: "inherit" }}
             onClick={(e) => handleRemove(e, cartItem)}
           >
             Remove

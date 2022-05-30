@@ -22,6 +22,8 @@ import { CartProvider } from "./contexts/CartContext";
 import CheckoutSuccess from "./components/checkout/CheckoutSuccess.component";
 import CheckoutCancel from "./components/checkout/CheckoutCancel.component";
 
+import Container from "@mui/material/Container";
+
 import "@stripe/stripe-js";
 
 const theme = createTheme({
@@ -64,18 +66,23 @@ function App() {
         <ThemeProvider theme={theme}>
           <div className="App">
             <Header />
-            <Router>
-              <Routes>
-                <Route path="/" element={<MenuList />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/cart" element={<Cart />} />
+            <Container maxWidth="lg">
+              <Router>
+                <Routes>
+                  {/* public routes */}
+                  <Route path="/" element={<MenuList />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
 
-                <Route path="/success" element={<CheckoutSuccess />} />
-                <Route path="/cancel" element={<CheckoutCancel />} />
-                <Route path="/myorders" element={<MyOrders />} />
-              </Routes>
-            </Router>
+                  {/* private routes */}
+
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/success" element={<CheckoutSuccess />} />
+                  <Route path="/cancel" element={<CheckoutCancel />} />
+                  <Route path="/myorders" element={<MyOrders />} />
+                </Routes>
+              </Router>
+            </Container>
           </div>
         </ThemeProvider>
       </CartProvider>

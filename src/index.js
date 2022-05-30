@@ -12,9 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <Container maxWidth="lg">
-        <App />
-      </Container>
+      <App />
     </AuthProvider>
   </React.StrictMode>
 );

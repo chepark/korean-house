@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ADD_TO_CART } from "../../types/types";
-import { getCartItems, removeCartItem } from "../../apis";
+import { getCartItems } from "../../apis";
 import SingleCartItem from "../singleCartItem/SingleCartItem.component.jsx";
 
 import Box from "@mui/material/Box";
@@ -12,6 +11,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
+
+import { cartTitleStyle } from "./cartMuistyle";
 
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -34,7 +36,6 @@ const Cart = () => {
   const [loading, setLoading] = useState();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [stripeCheckoutList, setStripeCheckoutList] = useState();
 
   const navigate = useNavigate();
 
@@ -76,6 +77,10 @@ const Cart = () => {
     return cartTotal;
   };
 
+  const redirectToMenu = () => {
+    navigate("/", { replace: true });
+  };
+
   const redirectToCheckout = async (e) => {
     e.preventDefault();
     let stripeCheckoutList = [];
@@ -101,7 +106,7 @@ const Cart = () => {
   return (
     <>
       <Box>
-        <Typography variant="h3" component="h1">
+        <Typography variant="h3" component="h1" sx={cartTitleStyle}>
           Cart
         </Typography>
 
@@ -109,25 +114,38 @@ const Cart = () => {
       <Alert severity="error">{cartState.cartError}</Alert>
     ) : null} */}
         {loading && <CircularProgress />}
-        <List>
-          {cartItems && cartItems.length > 0 && renderCartItems()}
-          {!cartItems && "The cart is empty."}
-          {cartItems?.length < 0 && "The cart is empty"}
-        </List>
-      </Box>
-      <Box>
-        <Typography>
-          Total: {cartItems && cartItems.length > 0 ? renderCartTotal() : null}
-        </Typography>
-      </Box>
-      <Button onClick={redirectToCheckout}>Go to Checkout</Button>
-    </>
+        {cartItems && cartItems.length > 0 && (
+          <>
+            <List>{renderCartItems()}</List>
+            <Box sx={{ marginTop: "1rem" }}>
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                }}
+              >
+                TOTAL: € {renderCartTotal()}
+              </Typography>
+            </Box>
+            <Button variant="contained" onClick={redirectToCheckout}>
+              Go to Checkout
+            </Button>
+          </>
+        )}
 
-    // <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-    //   {loading && <CircularProgress />}
-    //   {cartItems && cartItems.length > 0 && renderCartItems()}
-    //   cart
-    // </Box>
+        {(loading && !cartItems) ||
+          (cartItems?.length <= 0 && (
+            <>
+              <Box>
+                <Typography>The cart is empty.</Typography>
+                <ProductionQuantityLimitsIcon />
+              </Box>
+              <Button onClick={redirectToMenu}>Go to Menu</Button>
+            </>
+          ))}
+      </Box>
+    </>
   );
 };
 
