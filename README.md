@@ -2,7 +2,7 @@
 
 <p align="center">
   <img width="530" height="350" src="./src/assets/projectDemo.gif">
-  Click [here](https://youtu.be/mQRu7cY_LsE) to watch full demo video.
+  <br/> Click [here](https://youtu.be/mQRu7cY_LsE) to watch full demo video.
 </p>
 
 ## ⚙️ Features
