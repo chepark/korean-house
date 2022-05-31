@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -110,7 +110,9 @@ const Signup = () => {
         ) : (
           <LoadingButton loading>Submit</LoadingButton>
         )}
-        <p>Already have an account? Log In</p>
+        <p>
+          Already have an account? <Link to="/login">Log In</Link>
+        </p>
       </Container>
     </>
   );

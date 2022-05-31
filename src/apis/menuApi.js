@@ -1,9 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../configs/firebaseConfig";
 
-import SingleMenu from "../models/SingleMenu";
-import { GET_MENU } from "../types/types";
+import { db } from "../configs/firebaseConfig";
 
 export const getMenu = async (cb) => {
   const menus = [];

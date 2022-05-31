@@ -15,14 +15,12 @@ import {
 import { CartContext } from "../../contexts/CartContext";
 import "./header.style.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { cartCounter, getCartItems, userLogOut } from "../../apis";
+import { getCartItems, userLogOut } from "../../apis";
 
 const Header = () => {
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
-  // const [cartItems, setCartItems] = useState(null);
   const [cartNums, setCartNums] = useState();
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchCartItems = async () => {

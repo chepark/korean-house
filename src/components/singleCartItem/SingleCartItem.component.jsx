@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
 import { CartContext } from "../../contexts/CartContext";
-import { AuthContext } from "../../contexts/AuthContext";
 import { ADD_TO_CART } from "../../types/types";
 import {
   editCartItemQuantityInFirestore,
@@ -12,7 +11,6 @@ import {
   Box,
   ListItem,
   Divider,
-  ListItemText,
   TextField,
   Button,
   Typography,
@@ -26,14 +24,13 @@ import {
 
 const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
-  const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [changedQuantity, setChangedQuantity] = useState(cartItem.quantity);
 
   useEffect(() => {
     editCartItemQuantityInFirestore(
-      authState.user.uid,
+      user.uid,
       cartItem,
       changedQuantity,
       (cartItemsArr) => {
@@ -72,7 +69,7 @@ const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
   return (
     <>
       <ListItem disabled={loading} sx={listItemContainerMui}>
-        <Box component="div" sx={listItemLeftMui}>
+        <Box sx={listItemLeftMui}>
           <img
             className="menu-image"
             src={cartItem.imageURL}
@@ -83,7 +80,7 @@ const SingleCartItem = ({ cartItem, user, cartItems, setCartItems }) => {
             <Typography>€ {cartItem.price}</Typography>
           </Box>
         </Box>
-        <Box component="div" sx={listItemRightMui}>
+        <Box sx={listItemRightMui}>
           <TextField
             sx={{ maxWidth: "80px" }}
             // error={isError}

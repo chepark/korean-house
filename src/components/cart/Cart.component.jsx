@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 
-import { cartTitleStyle } from "./cartMuistyle";
+import { cartLoadingStyle, cartTitleStyle } from "./cartMuistyle";
 
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -32,7 +32,6 @@ const Cart = () => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   const [cartItems, setCartItems] = useState();
-  const [total, setTotal] = useState(null);
   const [loading, setLoading] = useState();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -58,6 +57,7 @@ const Cart = () => {
     return cartItems.map((cartItem) => {
       return (
         <SingleCartItem
+          key={cartItem.name}
           cartItem={cartItem}
           user={authState.user}
           setCartItems={setCartItems}
@@ -110,10 +110,11 @@ const Cart = () => {
           Cart
         </Typography>
 
-        {/* {cartState.cartError ? (
-      <Alert severity="error">{cartState.cartError}</Alert>
-    ) : null} */}
-        {loading && <CircularProgress />}
+        {loading && (
+          <Box sx={cartLoadingStyle}>
+            <CircularProgress />
+          </Box>
+        )}
         {cartItems && cartItems.length > 0 && (
           <>
             <List>{renderCartItems()}</List>

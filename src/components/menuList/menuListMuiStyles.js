@@ -5,3 +5,10 @@ export const menuListContainerStyle = {
 export const menuTitleStyle = {
   marginBottom: "2rem",
 };
+
+export const loadingStyle = {
+  height: "85vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};

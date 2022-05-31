@@ -6,11 +6,8 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  arrayUnion,
-  arrayRemove,
   query,
   where,
-  orderBy,
   documentId,
   deleteField,
 } from "firebase/firestore";
@@ -75,5 +72,3 @@ export const getUserOrdersFromFirestore = async (uid, cb) => {
 
   cb(orders);
 };
-
-// toLocaleDateString()

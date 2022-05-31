@@ -11,7 +11,12 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import { menuListContainerStyle, menuTitleStyle } from "./menuListMuiStyles";
+import {
+  loadingStyle,
+  menuListContainerStyle,
+  menuTitleStyle,
+} from "./menuListMuiStyles";
+import { CircularProgress } from "@mui/material";
 
 const Menu = () => {
   const { state: menuState, dispatch: menuDispatch } = useContext(MenuContext);
@@ -37,7 +42,11 @@ const Menu = () => {
         return <SingleMenu key={singleMenu.id} singleMenu={singleMenu} />;
       });
     } else {
-      return <div>loading...</div>;
+      return (
+        <Box sx={loadingStyle}>
+          <CircularProgress />
+        </Box>
+      );
     }
   };
 
