@@ -42,6 +42,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     await userLogOut();
+    window.location.href = "/";
   };
 
   const renderLogInAndSignup = () => {

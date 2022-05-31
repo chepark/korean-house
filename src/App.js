@@ -50,7 +50,6 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch({ type: LOGIN_SUCCESS, payload: user });
-        console.log("User in");
       } else {
         // user is signed out.
         dispatch({ type: LOGOUT });

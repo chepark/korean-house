@@ -56,20 +56,24 @@ export const getUserOrdersFromFirestore = async (uid, cb) => {
 
   let orders = [];
 
+  //
   querySnapshot.forEach((orderDoc) => {
     let orderObject = orderDoc.data();
 
-    // Change firebase timestamp to string.
-    let time = new Date(
-      orderObject.createdAt.seconds * 1000
-    ).toLocaleDateString();
+    // Change firebase timestamp to javascript object.
+    let time = orderObject.createdAt.toDate();
     orderObject.createdAt = time;
 
     // save document id as order number
     orderObject.orderNumber = orderDoc.id;
 
     orders.push(orderObject);
+
+    // Sort the array by created time.
+    orders = orders.sort((a, b) => b.createdAt - a.createdAt);
   });
 
   cb(orders);
 };
+
+// toLocaleDateString()
