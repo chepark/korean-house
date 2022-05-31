@@ -1,9 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../configs/firebaseConfig";
 
-import SingleMenu from "../models/SingleMenu";
-import { GET_MENU } from "../types/types";
+import { db } from "../configs/firebaseConfig";
 
 export const getMenu = async (cb) => {
   const menus = [];
@@ -12,8 +9,8 @@ export const getMenu = async (cb) => {
     const querySnapshot = await getDocs(collection(db, "menus"));
 
     querySnapshot.forEach((doc) => {
-      const { id, name, quantity, price, imageURL } = doc.data();
-      let singleMenu = { id, name, quantity, price, imageURL };
+      const { id, name, price, imageURL, stripePriceID } = doc.data();
+      let singleMenu = { id, name, price, imageURL, stripePriceID };
       menus.push(singleMenu);
     });
 

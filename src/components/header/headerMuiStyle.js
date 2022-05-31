@@ -1,3 +1,12 @@
+export const headerLayout = {
+  width: "100%",
+  backgroundColor: "primary.main",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
 export const headerStyle = {
   display: "flex",
   justifyContent: "space-between",
@@ -6,6 +15,7 @@ export const headerStyle = {
   color: "white",
 
   width: "100%",
+  maxWidth: "1280px",
   height: 50,
   // paddingLeft: "2rem",
   // paddingRight: "2rem",

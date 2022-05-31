@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -20,6 +21,7 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e, name) => {
     setErrors({});
@@ -35,8 +37,18 @@ const Signup = () => {
     // if no errors in validation
     // create user account.
     if (!errors) {
-      await createAccount(values.email, values.password, values.username);
+      await createAccount(
+        values.email,
+        values.password,
+        values.username,
+        () => {
+          setLoading(true);
+          navigate("/", { replace: true });
+        }
+      );
     } else return;
+
+    setLoading(false);
   };
 
   return (
@@ -98,7 +110,9 @@ const Signup = () => {
         ) : (
           <LoadingButton loading>Submit</LoadingButton>
         )}
-        <p>Already have an account? Log In</p>
+        <p>
+          Already have an account? <Link to="/login">Log In</Link>
+        </p>
       </Container>
     </>
   );

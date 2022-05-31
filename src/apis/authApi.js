@@ -4,10 +4,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { collection, setDoc, doc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../configs/firebaseConfig";
 
-export const createAccount = async (email, password, username) => {
+export const createAccount = async (email, password, username, cb) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -20,6 +20,8 @@ export const createAccount = async (email, password, username) => {
     // save the date in firestore
     await createUserInFirestore(userCredential.user);
     // reference is uid
+
+    cb();
   } catch (error) {
     console.log("Error in Create Account: ", error.code);
   }

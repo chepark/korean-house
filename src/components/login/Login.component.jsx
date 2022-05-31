@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -18,6 +18,7 @@ const Login = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e, name) => {
@@ -79,7 +80,9 @@ const Login = () => {
         ) : (
           <LoadingButton loading>Log In</LoadingButton>
         )}
-        <p>Don't have an account? Sign Up</p>
+        <p>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
       </Container>
     </>
   );

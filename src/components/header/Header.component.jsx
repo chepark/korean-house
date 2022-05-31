@@ -1,37 +1,46 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+
 import {
   headerStyle,
   headerRightStyle,
   headerLeftStyle,
   cartStyle,
   cartNumStyle,
-} from "./headerMaterialStyle";
+  headerLayout,
+} from "./headerMuiStyle";
 import { CartContext } from "../../contexts/CartContext";
 import "./header.style.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { userLogOut } from "../../apis";
+import { getCartItems, userLogOut } from "../../apis";
 
 const Header = () => {
-  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   const { state: authState, dispatch: authDispatch } = useContext(AuthContext);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const [cartNums, setCartNums] = useState();
 
-  const onCartClick = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      if (authState.user && authState.user.uid) {
+        const firestoreCartItems = await getCartItems(
+          authState.user.uid,
+          () => {}
+        );
+        if (firestoreCartItems?.length > 0) {
+          setCartNums(firestoreCartItems.length);
+        } else setCartNums(0);
+      }
+    };
 
-    // user && save cartItems data in firestore.
-    // 1. get user uid.
-    // 2. search user document with user uid in firestore.
-    // 3. save cartItems in cartItems fields.
-    // 3.1 any repetitive items?
-    // !user && save cartItems in localStorage.
-  };
+    fetchCartItems();
+  }, [authState.user, cartState.cartItems]);
 
   const handleLogout = async () => {
     await userLogOut();
+    window.location.href = "/";
   };
 
   const renderLogInAndSignup = () => {
@@ -50,15 +59,16 @@ const Header = () => {
   const renderLogOutAndCart = () => {
     return (
       <>
-        <Typography onClick={handleLogout}>Log Out</Typography>
+        <a className="header-link link-text" href="/myorders">
+          <Typography>My Orders</Typography>
+        </a>
+        <Typography className="header-link link-text" onClick={handleLogout}>
+          Log Out
+        </Typography>
         <Box sx={cartStyle}>
           <a className="header-link" href="/cart">
             <ShoppingCartOutlinedIcon />
-            <Typography sx={cartNumStyle}>
-              {cartState.cartItems && cartState.cartItems.length > 0
-                ? cartState.cartItems.length
-                : "0"}
-            </Typography>
+            <Typography sx={cartNumStyle}>{cartNums}</Typography>
           </a>
         </Box>
       </>
@@ -66,14 +76,16 @@ const Header = () => {
   };
 
   return (
-    <Box sx={headerStyle}>
-      <a className="header-link link-text" href="/">
-        <Box sx={headerLeftStyle}>
-          <Typography>Food Delivery</Typography>
+    <Box sx={headerLayout}>
+      <Box sx={headerStyle}>
+        <a className="header-link link-text" href="/">
+          <Box sx={headerLeftStyle}>
+            <Typography>Food Delivery</Typography>
+          </Box>
+        </a>
+        <Box sx={headerRightStyle}>
+          {!authState.user ? renderLogInAndSignup() : renderLogOutAndCart()}
         </Box>
-      </a>
-      <Box sx={headerRightStyle}>
-        {!authState.user ? renderLogInAndSignup() : renderLogOutAndCart()}
       </Box>
     </Box>
   );

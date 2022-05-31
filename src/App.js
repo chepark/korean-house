@@ -9,6 +9,7 @@ import Login from "./components/login/Login.component";
 import Signup from "./components/signup/Signup.component";
 import MenuList from "./components/menuList/MenuList.component";
 import Cart from "./components/cart/Cart.component";
+import MyOrders from "./components/myOrders/MyOrders.component";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./configs/firebaseConfig";
@@ -17,6 +18,13 @@ import { LOGIN_SUCCESS, LOGOUT } from "./types/types";
 
 import { MenuProvider } from "./contexts/MenuContext";
 import { CartProvider } from "./contexts/CartContext";
+
+import CheckoutSuccess from "./components/checkout/CheckoutSuccess.component";
+import CheckoutCancel from "./components/checkout/CheckoutCancel.component";
+
+import Container from "@mui/material/Container";
+
+import "@stripe/stripe-js";
 
 const theme = createTheme({
   palette: {
@@ -42,7 +50,6 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch({ type: LOGIN_SUCCESS, payload: user });
-        console.log("User in");
       } else {
         // user is signed out.
         dispatch({ type: LOGOUT });
@@ -58,14 +65,23 @@ function App() {
         <ThemeProvider theme={theme}>
           <div className="App">
             <Header />
-            <Router>
-              <Routes>
-                <Route path="/" element={<MenuList />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/cart" element={<Cart />} />
-              </Routes>
-            </Router>
+            <Container maxWidth="lg">
+              <Router>
+                <Routes>
+                  {/* public routes */}
+                  <Route path="/" element={<MenuList />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+
+                  {/* private routes */}
+
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/success" element={<CheckoutSuccess />} />
+                  <Route path="/cancel" element={<CheckoutCancel />} />
+                  <Route path="/myorders" element={<MyOrders />} />
+                </Routes>
+              </Router>
+            </Container>
           </div>
         </ThemeProvider>
       </CartProvider>

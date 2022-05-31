@@ -17,25 +17,12 @@ export const cartReducer = (state, action) => {
 
   switch (type) {
     case ADD_TO_CART:
-      const existingCartItem = state.cartItems.find(
-        (cartItem) => cartItem.name === payload.name
-      );
-      if (existingCartItem) {
-        existingCartItem.editQuantityInCart(payload.quantity);
-        return { cartItems: [...state.cartItems] };
-      } else {
-        const newCartItem = new CartItem(payload);
-        return { cartItems: [...state.cartItems, newCartItem] };
-      }
+      return { cartItems: payload };
 
     case REMOVE_FROM_CART:
       const removingItem = payload;
       const currentCartItems = state.cartItems;
       return currentCartItems.splice(currentCartItems.indexOf(removingItem), 1);
-
-    case EDIT_QUANTITY:
-      existingCartItem.editQuantityInCart(payload);
-      return { cartItems: [...state.cartItems] };
 
     case CART_ERROR:
       return { ...state.cartItems, cartError: payload };

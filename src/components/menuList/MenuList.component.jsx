@@ -10,6 +10,13 @@ import SingleMenu from "../menuItem/SingleMenu.comoponent";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import {
+  loadingStyle,
+  menuListContainerStyle,
+  menuTitleStyle,
+} from "./menuListMuiStyles";
+import { CircularProgress } from "@mui/material";
 
 const Menu = () => {
   const { state: menuState, dispatch: menuDispatch } = useContext(MenuContext);
@@ -35,19 +42,25 @@ const Menu = () => {
         return <SingleMenu key={singleMenu.id} singleMenu={singleMenu} />;
       });
     } else {
-      return <div>loading...</div>;
+      return (
+        <Box sx={loadingStyle}>
+          <CircularProgress />
+        </Box>
+      );
     }
   };
 
   return (
     <>
-      <Typography variant="h3" component="h1">
-        Menu
-      </Typography>
-      {cartState.cartError ? (
-        <Alert severity="error">{cartState.cartError}</Alert>
-      ) : null}
-      <List>{renderMenu()}</List>
+      <Box sx={menuListContainerStyle}>
+        <Typography variant="h3" component="h1" sx={menuTitleStyle}>
+          Menu
+        </Typography>
+        {cartState.cartError ? (
+          <Alert severity="error">{cartState.cartError}</Alert>
+        ) : null}
+        <List>{renderMenu()}</List>
+      </Box>
     </>
   );
 };
