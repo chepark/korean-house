@@ -1,7 +1,7 @@
 # React Food Order Application
 
 <p align="center">
-  <img width="530" height="350" src="./src/assets/projectDemo.gif">
+  <img width="530" height="auto" src="./src/assets/projectDemo.gif">
   <br/> Click (https://youtu.be/mQRu7cY_LsE) to watch full demo video.
 </p>
 
