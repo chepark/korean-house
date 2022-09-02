@@ -1,4 +1,5 @@
-# React Food Order Application
+# Korean House Application
+It is an web application where users can order Korean food.
 
 <p align="center">
   <img width="530" height="auto" src="./src/assets/projectDemo.gif">
