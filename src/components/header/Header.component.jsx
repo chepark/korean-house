@@ -80,7 +80,7 @@ const Header = () => {
       <Box sx={headerStyle}>
         <a className="header-link link-text" href="/">
           <Box sx={headerLeftStyle}>
-            <Typography>Food Delivery</Typography>
+            <Typography>Korean House</Typography>
           </Box>
         </a>
         <Box sx={headerRightStyle}>
