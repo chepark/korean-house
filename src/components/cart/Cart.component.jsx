@@ -18,10 +18,12 @@ import { cartLoadingStyle, cartTitleStyle } from "./cartMuistyle";
 import { loadStripe } from "@stripe/stripe-js";
 
 let stripePromise;
+const stripePublishableKey =
+  "pk_test_51L41c1HbDFztQzbDfxu1y3SEBI65HMj7td3YLnzCUN2Di7RsG9Jq1ZXqkqj0LvsqF8URLqQoCT1xUWjIbU0BziCZ00fklyqa9l";
 
 const getStripe = () => {
   if (!stripePromise) {
-    stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_KEY}`);
+    stripePromise = loadStripe(stripePublishableKey);
   }
 
   return stripePromise;
